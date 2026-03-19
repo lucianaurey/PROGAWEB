@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ configuracion["nombre_sitio"] }} – {{ configuracion["tagline"] }}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="container header-inner">
+        <a class="brand" href="#">
+            <img width="150" class="logo"
+                 src="{{ url_for('static', filename='imagenes/logo/logo.png') }}"
+                 alt="{{ configuracion['nombre_sitio'] }}">
+        </a>
+
+        <nav class="nav">
+            <a href="#servicios">Cursos</a>
+            <a href="#nosotros">Nosotros</a>
+            <a href="#contacto">Contacto</a>
+        </nav>
+
+        <a href="#contacto" class="btn btn-primary">Unirse</a>
+    </div>
+</header>
+
+<main>
+
+    <section class="hero">
+        <div class="container hero-inner">
+
+            <div class="hero-copy">
+                <p class="pill">{{ hero["mensaje_superior"] }}</p>
+
+                <h1>{{ hero["titulo"] }}</h1>
+
+                <p class="lead">{{ hero["descripcion"] }}</p>
+
+                <div class="hero-actions">
+                    <a class="btn btn-primary" href="{{ hero['boton_1_url'] }}">
+                        {{ hero["boton_1_texto"] }}
+                    </a>
+                    <a class="btn btn-ghost" href="{{ hero['boton_2_url'] }}">
+                        {{ hero["boton_2_texto"] }}
+                    </a>
+                </div>
+
+                <div class="hero-metrics">
+                    {% for e in estadisticas %}
+                    <div class="metric">
+                        <span class="metric-num">{{ e["valor"] }}</span>
+                        <span class="metric-label">{{ e["nombre"] }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="hero-card hero-card-img">
+                <img src="{{ url_for('static', filename=hero['imagen']) }}" alt="{{ hero['titulo'] }}">
+            </div>
+
+        </div>
+    </section>
+
+    <section id="servicios" class="section">
+        <div class="container">
+            <header class="section-head">
+                <h2>Cursos</h2>
+                <p>Descubre nuestros cursos</p>
+            </header>
+
+            <div class="grid-3">
+                {% for curso in cursos %}
+                <article class="card">
+                    <img src="{{ url_for('static', filename=curso['imagen']) }}" alt="{{ curso['titulo'] }}">
+                    <h3>{{ curso["titulo"] }}</h3>
+                    <p>{{ curso["descripcion"] }}</p>
+
+                    <ul class="list">
+                        {% for c in curso["caracteristicas"] %}
+                        <li>{{ c["caracteristica"] }}</li>
+                        {% endfor %}
+                    </ul>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section id="nosotros" class="section alt">
+        <div class="container split">
+
+            <div class="about-gallery">
+                <img src="{{ url_for('static', filename=nosotros['imagen']) }}" alt="{{ nosotros['titulo'] }}">
+            </div>
+
+            <div>
+                <h2>{{ nosotros["titulo"] }}</h2>
+                <p>{{ nosotros["descripcion_1"] }}</p>
+                <p class="muted">{{ nosotros["descripcion_2"] }}</p>
+
+                <div class="panel">
+                    <h3>{{ nosotros["subtitulo"] }}</h3>
+                    <p class="muted">{{ nosotros["resumen"] }}</p>
+
+                    <div class="tags">
+                        {% for v in valores %}
+                        <span class="tag">{{ v["nombre"] }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="contacto" class="section">
+        <div class="container">
+            <header class="section-head">
+                <h2>Contacto</h2>
+                <p>{{ configuracion["email_contacto"] }}{% if configuracion["telefono_contacto"] %} · {{ configuracion["telefono_contacto"] }}{% endif %}</p>
+            </header>
+
+            <form class="form" method="POST" action="{{ url_for('index') }}">
+                <div class="form-row">
+                    <label>
+                        Nombre
+                        <input type="text" name="nombre" placeholder="Tu nombre" required>
+                    </label>
+
+                    <label>
+                        Email
+                        <input type="email" name="email" placeholder="{{ configuracion['email_contacto'] }}" required>
+                    </label>
+                </div>
+
+                <label>
+                    Mensaje
+                    <textarea name="mensaje" rows="5" placeholder="Escribe tu mensaje..." required></textarea>
+                </label>
+
+                <button class="btn btn-primary" type="submit">Enviar</button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <p>{{ configuracion["footer_texto"] }}</p>
+
+            <nav class="footer-links">
+                <a href="#servicios">Cursos</a>
+                <a href="#nosotros">Nosotros</a>
+                <a href="#contacto">Contacto</a>
+                <a href="{{ url_for('mensajes') }}">Mensajes</a>
+            </nav>
+        </div>
+    </footer>
+
+</main>
+
+</body>
+</html>
